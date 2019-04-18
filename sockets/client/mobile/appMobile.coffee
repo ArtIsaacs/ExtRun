@@ -1,5 +1,6 @@
 PIXI = require 'pixi.js'
 $ = require 'jquery'
+video = './scripts/assets/black.mp4'
 
 class MobileApp extends PIXI.Application
   animation:true
@@ -10,7 +11,7 @@ class MobileApp extends PIXI.Application
     @socket = socket
     window.addEventListener 'devicemotion', @onDeviceMotion
     $('body').html @view
-
+  
   onDeviceMotion: (evt) =>
     obj = {
       x:evt.accelerationIncludingGravity.x

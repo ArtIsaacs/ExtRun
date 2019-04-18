@@ -1,6 +1,6 @@
 gsap = require 'gsap'
 
-class ExDino 
+class Shadows 
 
   velY: 0
   velX: 0
@@ -14,11 +14,10 @@ class ExDino
     @data = data
     @base = 520
     @x = 150
-    @y = 520
+    @y = 673
     @animationSpeed = 0.3
     @buildAnimations()
     
-
   buildAnimations: () =>
     for animation, frames of @data.animations
       @animations[animation] = new PIXI.extras.AnimatedSprite(frames)
@@ -31,12 +30,11 @@ class ExDino
       @animations[animation].active = false 
       @app.stage.addChild(@animations[animation])
 
-    @animations['Idle'].play()
-    @animations['Idle'].alpha = 1
-    @animations['Idle'].active = true
-    @animations['Jump'].loop = false
+    @animations['SombraIdle'].play()
+    @animations['SombraIdle'].alpha = 0.6
+    @animations['SombraIdle'].active = true
+    @animations['SombraJump'].loop = false
     
-
   changeValue: (newValue) =>
     for key, value of @animations
       if value.active == true
@@ -46,36 +44,32 @@ class ExDino
 
     @animations[newValue].x = @x
     @animations[newValue].y = @y
-    @animations[newValue].alpha = 1
+    @animations[newValue].alpha = 0.6
     @animations[newValue].active = true
     @animations[newValue].play()
 
-
   run: () =>
     if @isDead == false
-      @changeValue('Run')
+        @changeValue('SombraRun')
   
   dead: () =>
     if @isDead == true
-      @changeValue('Dead')
+        @changeValue('SombraDead')
   
   jump: (moveY) =>
     if @isDead == false
-      @isJumping = true
-      @changeValue('Jump')
-      gsap.TweenMax.to @animations['Jump'], 0.5,
-        y: 500
-        x: 160
-        onComplete: () =>
-          @onGround()
-
+        @isJumping = true
+        @changeValue('SombraJump')
+        gsap.TweenMax.to @animations['SombraJump'], 0.5,
+          x: 160
+          onComplete: () =>
+            @onGround()
 
   onGround: () =>
-    gsap.TweenMax.to @animations['Jump'], 0.5,
-      y: @base
+    gsap.TweenMax.to @animations['SombraJump'], 0.5,
       x: 150
       onComplete: () =>
         @isJumping = false
         @run()
 
-module.exports = ExDino
+module.exports = Shadows
