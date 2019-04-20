@@ -14,7 +14,7 @@ class Shadows
     @data = data
     @base = 520
     @x = 150
-    @y = 673
+    @y = 654
     @animationSpeed = 0.3
     @buildAnimations()
     
@@ -34,6 +34,7 @@ class Shadows
     @animations['SombraIdle'].alpha = 0.6
     @animations['SombraIdle'].active = true
     @animations['SombraJump'].loop = false
+    @animations['SombraDead'].loop = false
     
   changeValue: (newValue) =>
     for key, value of @animations
@@ -53,20 +54,19 @@ class Shadows
         @changeValue('SombraRun')
   
   dead: () =>
-    if @isDead == true
-        @changeValue('SombraDead')
+    @changeValue('SombraDead')
   
   jump: (moveY) =>
     if @isDead == false
         @isJumping = true
         @changeValue('SombraJump')
-        gsap.TweenMax.to @animations['SombraJump'], 0.5,
+        gsap.TweenMax.to @animations['SombraJump'], 0.7,
           x: 160
           onComplete: () =>
             @onGround()
 
   onGround: () =>
-    gsap.TweenMax.to @animations['SombraJump'], 0.5,
+    gsap.TweenMax.to @animations['SombraJump'], 0.7,
       x: 150
       onComplete: () =>
         @isJumping = false

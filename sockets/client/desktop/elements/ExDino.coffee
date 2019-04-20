@@ -14,7 +14,7 @@ class ExDino
     @data = data
     @base = 520
     @x = 150
-    @y = 520
+    @y = 500
     @animationSpeed = 0.3
     @buildAnimations()
     
@@ -35,6 +35,7 @@ class ExDino
     @animations['Idle'].alpha = 1
     @animations['Idle'].active = true
     @animations['Jump'].loop = false
+    @animations['Dead'].loop = false
     
 
   changeValue: (newValue) =>
@@ -54,24 +55,28 @@ class ExDino
   run: () =>
     if @isDead == false
       @changeValue('Run')
+    else
+      @dead()
   
   dead: () =>
-    if @isDead == true
-      @changeValue('Dead')
+    @changeValue('Dead')
+    @app.pause = true
   
   jump: (moveY) =>
     if @isDead == false
       @isJumping = true
       @changeValue('Jump')
-      gsap.TweenMax.to @animations['Jump'], 0.5,
-        y: 500
-        x: 160
+      gsap.TweenMax.to @animations['Jump'], 0.7,
+        y: 420
+        x: 170
         onComplete: () =>
           @onGround()
+    else
+      @dead()
 
 
   onGround: () =>
-    gsap.TweenMax.to @animations['Jump'], 0.5,
+    gsap.TweenMax.to @animations['Jump'], 0.7,
       y: @base
       x: 150
       onComplete: () =>
