@@ -60,7 +60,6 @@ body{
   height: 100vh;
   padding: 0;
   margin: 0;
-  background-color: #666;
   display: none;
   opacity: .85;
   position: absolute;
@@ -89,6 +88,13 @@ body{
 }
 .container .row .code{
   font-size: 6em;
+}
+#black{
+  /* visibility: hidden; */
+  position: absolute;
+  z-index: 1;
+  width: 1px;
+  height: 1px;
 }
 .colordesktop{
   color: #FFD2BD;

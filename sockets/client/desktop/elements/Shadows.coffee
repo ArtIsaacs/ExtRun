@@ -30,9 +30,9 @@ class Shadows
       @animations[animation].active = false 
       @app.stage.addChild(@animations[animation])
 
-    @animations['SombraIdle'].play()
-    @animations['SombraIdle'].alpha = 0.6
-    @animations['SombraIdle'].active = true
+    @animations['SombraRun'].play()
+    @animations['SombraRun'].alpha = 0.6
+    @animations['SombraRun'].active = true
     @animations['SombraJump'].loop = false
     @animations['SombraDead'].loop = false
     

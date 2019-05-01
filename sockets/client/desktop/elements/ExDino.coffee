@@ -31,9 +31,9 @@ class ExDino
       @animations[animation].active = false 
       @app.stage.addChild(@animations[animation])
 
-    @animations['Idle'].play()
-    @animations['Idle'].alpha = 1
-    @animations['Idle'].active = true
+    @animations['Run'].play()
+    @animations['Run'].alpha = 1
+    @animations['Run'].active = true
     @animations['Jump'].loop = false
     @animations['Dead'].loop = false
     
@@ -60,15 +60,15 @@ class ExDino
   
   dead: () =>
     @changeValue('Dead')
-    @app.pause = true
+    #@app.pause = true
   
   jump: (moveY) =>
     if @isDead == false
       @isJumping = true
       @changeValue('Jump')
       gsap.TweenMax.to @animations['Jump'], 0.7,
-        y: 420
-        x: 170
+        y: 350
+        x: 200
         onComplete: () =>
           @onGround()
     else

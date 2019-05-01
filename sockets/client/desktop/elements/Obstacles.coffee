@@ -22,12 +22,6 @@ class Obstacles extends PIXI.Graphics
                 @y = 620
                 @x = window.innerWidth
                 @endFill()
-            when 3
-                @beginFill(0x0000ff)
-                @drawRect(0, 0, 30, 30)
-                @y = 620
-                @x = window.innerWidth
-                @endFill()
 
     animate: () =>
         if @x <= 0

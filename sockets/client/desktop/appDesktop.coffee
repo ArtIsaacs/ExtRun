@@ -5,11 +5,17 @@ PIXI = require 'pixi.js'
 ExDino = require './elements/ExDino'
 Rect = require './elements/Rect'
 BgImageBonita = './scripts/assets/bottombonito2.png'
+BgImageBonita2 = './scripts/assets/bottombonito2-2.png'
 BgCieloBonito = './scripts/assets/cielobonito.png'
+BgCieloBonito2 = './scripts/assets/cielobonito-2.png'
 BgVolcanBonito = './scripts/assets/intro4.png'
+BgVolcanBonito2 = './scripts/assets/intro4-2.png'
 BgNubesBonito = './scripts/assets/intro6.png'
+BgNubesBonito2 = './scripts/assets/intro6-2.png'
 BgBosqueBonitoBh = './scripts/assets/intro5.png'
+BgBosqueBonitoBh2 = './scripts/assets/intro5-2.png'
 BgBosqueBonitoFr = './scripts/assets/intro7.png'
+BgBosqueBonitoFr2 = './scripts/assets/intro7-2.png'
 Terrence = './scripts/assets/Terrence2.jpg'
 BgInstrucciones = './scripts/assets/boton1.png'
 Backgrounds = require './elements/backgroundDesktop'
@@ -18,6 +24,7 @@ DinoData = 'http://localhost:3000/scripts/assets/sprites.json'
 ShadowData = 'http://localhost:3000/scripts/assets/sombra.json'
 EnemyData = 'http://localhost:3000/scripts/assets/enemyjson.json'
 Obstacles = require './elements/Obstacles'
+ObstaclesAnimations = require './elements/ObstaclesAnimations'
 Shadow = require './elements/Shadows'
 
 class DesktopApp extends PIXI.Application
@@ -26,9 +33,7 @@ class DesktopApp extends PIXI.Application
   obstaculos: []
   pause: false
   score: 0
-  instrucciones1: 0
-  instrucciones2: 0
-  instrucciones3: 0
+  jumpcount: 0
 
   constructor: (config, socket) ->
     super(config)
@@ -43,7 +48,6 @@ class DesktopApp extends PIXI.Application
   buildApp:=>
     @sheet = PIXI.loader.resources["http://localhost:3000/scripts/assets/sprites.json"]
     @sheet2 = PIXI.loader.resources["http://localhost:3000/scripts/assets/sombra.json"]
-    @sheet3 = PIXI.loader.resources["http://localhost:3000/scripts/assets/enemyjson.json"]
     $('body').html @view
     @buildBackgrounds()
     @dino = new ExDino(@, @sheet.spritesheet)
@@ -126,33 +130,14 @@ class DesktopApp extends PIXI.Application
     @stage.addChild(@bgPath2)
 
   buildObstacles: () =>
-    setInterval =>
-      type = mathjs.randomInt(1,3)
-      @obstacles = new Obstacles(type, @)
-      @stage.addChild(@obstacles)
-      @addAnimationNodes(@obstacles)
-      @obstaculos.push(@obstacles)
-    , 6000
-    #if type == 1 && @instrucciones1 < 2
-    #  @bgInstrucciones.alpha = 1
-    #  @terrence.alpha = 1
-    #  @txt2.alpha = 1
-    #  @txt2.text = "Este obstaculo es un tronco. \n Para evitar chocar debes saltar con tu celular."
-    #  @instrucciones1 = @instrucciones1 + 1
-    #
-    #if type == 1 && @instrucciones2 < 2
-    #  @bgInstrucciones.alpha = 1
-    #  @terrence.alpha = 1
-    #  @txt2.alpha = 1
-    #  @txt2.text = "Este obstaculo es una roca. \n Para evitar chocar debes agacharte con tu celular."
-    #  @instrucciones2 = @instrucciones2 + 1
-    #
-    #if type == 1 && @instrucciones3 < 2
-    #  @bgInstrucciones.alpha = 1
-    #  @terrence.alpha = 1
-    #  @txt2.alpha = 1
-    #  @txt2.text = "Este obstaculo es un arbol. \n Para evitar chocar debes agacharte con tu celular."
-    #  @instrucciones3 = @instrucciones3 + 1
+    @sheet3 = PIXI.loader.resources["http://localhost:3000/scripts/assets/enemyjson.json"]
+    return if @pause
+    setTimeout =>
+      setInterval =>
+        type = mathjs.randomInt(1,3)
+        @obstacles = new ObstaclesAnimations(type, @, @sheet3.spritesheet)
+      , 6000
+    ,5000
 
   buildText: () ->
     textStyle = new PIXI.TextStyle({
@@ -169,7 +154,7 @@ class DesktopApp extends PIXI.Application
 
   buildInstrucciones: () =>
     @bgInstrucciones = new Instrucciones(BgInstrucciones)
-    @bgInstrucciones.alpha = 0
+    @bgInstrucciones.alpha = 1
     @stage.addChild(@bgInstrucciones)
     
     @terrence = new Instrucciones(Terrence)
@@ -177,26 +162,27 @@ class DesktopApp extends PIXI.Application
     @terrence.height = 200
     @terrence.x = @bgInstrucciones.x + 70
     @terrence.y = @bgInstrucciones.y + 30
-    @terrence.alpha = 0
+    @terrence.alpha = 1
     @stage.addChild(@terrence)
     
     textStyle = new PIXI.TextStyle({
       fontFamily: 'Arial'
       fill: 'white'
-      fontSize: 26
+      fontSize: 23
     })
-    @txt2 = new PIXI.Text(null, textStyle)
+    @txt2 = new PIXI.Text('¡Hola! Mi nombre es Terrence y yo seré \n el encargado de guiarte en esta aventura. \n Para saltar, debes hacerlo con tu celular \n en el bolsillo', textStyle)
     @txt2.x = @bgInstrucciones.x + 300
     @txt2.y = @bgInstrucciones.y + 40
-    @txt2.alpha = 0
+    @txt2.alpha = 1
     @stage.addChild(@txt2)
 
   movimiento: (evt) =>
-    return if @pause
     @obj = JSON.parse(evt)
     moveY = @obj.y
     moveX = @obj.x
     moveZ = @obj.z
+
+    return if @pause == true
 
     @bgCieloBonito.x -= 2
     @bgCieloBonito2.x -= 2
@@ -210,8 +196,8 @@ class DesktopApp extends PIXI.Application
     @bgForestFront.x -= 4.5
     @bgForestFront2.x -= 4.5
     
-    @bgPath.x -= 5
-    @bgPath2.x -= 5
+    @bgPath.x -= 9
+    @bgPath2.x -= 9
     
     if @bgCieloBonito.x is 0
       @bgCieloBonito2.x = 2100
@@ -247,23 +233,45 @@ class DesktopApp extends PIXI.Application
     
     if moveY >= 30 && @dino.isJumping == false && @dino.isRunning == false
       @dino.jump()
+      @jumpcount = @jumpcount + 1
         
     if moveY >= 30 && @sombras.isJumping == false && @sombras.isRunning == false
       @sombras.jump()
 
+    if @jumpcount == 1
+      @bgInstrucciones.alpha = 0
+      @terrence.alpha = 0
+      @txt2.alpha = 0
+
+    return if @jumpcount == 0
     @score = @score += 1
     @txt.text = "Score \n #{@score}"
 
-  colisiones: (obj1, arr) =>
-    for rect in arr
-      if (obj1.x < rect.x + rect.width && obj1.x + obj1.width > rect.x)
-          if (obj1.y < rect.y + rect.height && obj1.y + obj1.height > rect.y)
-            if obj1.isJumping == false
-              console.log "memori xdxd"
-              obj1.isDead = true
-              obj1.dead()
-              @sombras.isDead = true
-              @sombras.dead()
+  colisiones: (obj1, rect) =>
+    if (obj1.x < rect.x + rect.width && obj1.x + obj1.width > rect.x)
+        if (obj1.y < rect.y + rect.height && obj1.y + obj1.height > rect.y)
+          if obj1.isJumping == false
+            obj1.isDead = true
+            obj1.dead()
+            @sombras.isDead = true
+            @sombras.dead()
+            @pause = true
+            
+            textStyle = new PIXI.TextStyle({
+              fontFamily: 'Arial'
+              fill: 'black'
+              fontSize: 23
+            })
+            @txt3 = new PIXI.Text('Para volver a jugar, refresca la pagina en tu celular y en tu computadora', textStyle)
+            @txt3.x = window.innerWidth / 2 - @txt3.width / 2
+            @txt3.y = window.innerHeight / 4
+            @txt3.alpha = 1
+            @stage.addChild(@txt3)
+            @bgInstrucciones.alpha = 1
+            @bgInstrucciones.x = @txt3.x - 20
+            @bgInstrucciones.y = @txt3.y - 20
+            @bgInstrucciones.width = 0
+
 
   garbageCollector: (item) =>
     animationChild = @animationNodes.indexOf(item)
@@ -279,7 +287,6 @@ class DesktopApp extends PIXI.Application
 
   animate:=>
     @ticker.add ()=>
-      @colisiones(@dino, @obstaculos)
       for n in @animationNodes
         n.animate?()
 

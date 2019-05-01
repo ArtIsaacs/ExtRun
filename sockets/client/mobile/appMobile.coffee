@@ -1,6 +1,7 @@
 PIXI = require 'pixi.js'
 $ = require 'jquery'
 video = './scripts/assets/black.mp4'
+NoSleep = require 'nosleep.js'
 
 class MobileApp extends PIXI.Application
   animation:true
@@ -9,8 +10,15 @@ class MobileApp extends PIXI.Application
   constructor: (config, socket) ->
     super(config)
     @socket = socket
+    window.onLoad = @onLoad()
+  
+  onLoad: () =>
+    console.log 1
     window.addEventListener 'devicemotion', @onDeviceMotion
     $('body').html @view
+    nosleep = new NoSleep()
+    nosleep.enable()
+
   
   onDeviceMotion: (evt) =>
     obj = {
