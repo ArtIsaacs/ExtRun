@@ -172,7 +172,7 @@ class DesktopApp extends PIXI.Application
     })
     @txt2 = new PIXI.Text('¡Hola! Mi nombre es Terrence y yo seré \n el encargado de guiarte en esta aventura. \n Para saltar, debes hacerlo con tu celular \n en el bolsillo', textStyle)
     @txt2.x = @bgInstrucciones.x + 300
-    @txt2.y = @bgInstrucciones.y + 40
+    @txt2.y = @bgInstrucciones.y + 70
     @txt2.alpha = 1
     @stage.addChild(@txt2)
 
@@ -259,7 +259,7 @@ class DesktopApp extends PIXI.Application
             
             textStyle = new PIXI.TextStyle({
               fontFamily: 'Arial'
-              fill: 'black'
+              fill: 'white'
               fontSize: 23
             })
             @txt3 = new PIXI.Text('Para volver a jugar, refresca la pagina en tu celular y en tu computadora', textStyle)
@@ -268,9 +268,10 @@ class DesktopApp extends PIXI.Application
             @txt3.alpha = 1
             @stage.addChild(@txt3)
             @bgInstrucciones.alpha = 1
-            @bgInstrucciones.x = @txt3.x - 20
-            @bgInstrucciones.y = @txt3.y - 20
-            @bgInstrucciones.width = 0
+            @bgInstrucciones.x = @txt3.x - 60
+            @bgInstrucciones.y = @txt3.y - 50
+            @bgInstrucciones.width = @txt3.width + 150
+            @bgInstrucciones.height = @txt.height + 90
 
 
   garbageCollector: (item) =>
